@@ -1,0 +1,52 @@
+name: arm64 build checks
+
+on:
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-18.04
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install dependency package
+      run: |
+        sed -i -E 's|^deb ([^ ]+) (.*)$|deb [arch=amd64] \1 \2\ndeb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ \2|' /etc/apt/sources.list 
+        dpkg --add-architecture arm64
+        apt-get update
+        apt-get install -y --no-install-recommends \
+                crossbuild-essential-arm64 \
+                git \
+                cmake \
+                ca-certificates \
+                libpython-dev:arm64 \
+                libpython3-dev:arm64 \
+                libusb-1.0-0-dev:arm64 \
+                python-numpy \
+                python3-numpy \
+                libgstreamer1.0-dev:arm64 \
+                libgstreamer-plugins-base1.0-dev:arm64
+
+    - name: Configure
+      run: |
+        mkdir build
+        cd build
+        cmake -DBUILD_SHARED_LIBS=ON \
+              -DBUILD_PERF_TESTS=ON \
+              -DBUILD_TESTS=ON \
+              -DWITH_OPENNI2=ON \
+              -DWITH_GDAL=ON \
+              -DBUILD_EXAMPLES=OFF \
+              -DPYTHON_DEFAULT_EXECUTABLE=/usr/bin/python3 \
+              -DWITH_OPENCL=OFF \
+              -DBUILD_DOCS=OFF \
+              -DCMAKE_TOOLCHAIN_FILE=../platforms/linux/aarch64-gnu.toolchain.cmake \
+              -DWITH_CUDA=OFF ../
+
+    - name: Build
+      run: |
+        cd build
+        cmake --build . --config release -- -j4
+
