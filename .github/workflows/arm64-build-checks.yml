@@ -32,7 +32,7 @@ jobs:
     - name: Fetch opencv_contrib
       run: |
         cd ..
-        git clone -–depth 1 https://github.com/opencv/opencv_contrib.git
+        git clone -–depth=1 https://github.com/opencv/opencv_contrib.git
 
     - name: Configure
       run: |
