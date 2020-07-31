@@ -13,10 +13,10 @@ jobs:
     - uses: actions/checkout@v2
     - name: Install dependency package
       run: |
-        sed -i -E 's|^deb ([^ ]+) (.*)$|deb [arch=amd64] \1 \2\ndeb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ \2|' /etc/apt/sources.list 
-        dpkg --add-architecture arm64
-        apt-get update
-        apt-get install -y --no-install-recommends \
+        sudo sed -i -E 's|^deb ([^ ]+) (.*)$|deb [arch=amd64] \1 \2\ndeb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ \2|' /etc/apt/sources.list 
+        sudo dpkg --add-architecture arm64
+        sudo apt-get update
+        sudo apt-get install -y --no-install-recommends \
                 crossbuild-essential-arm64 \
                 git \
                 cmake \
