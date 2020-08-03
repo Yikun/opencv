@@ -37,10 +37,7 @@ jobs:
       run: |
         mkdir build
         cd build
-        cmake -DWITH_OPENNI2=ON \
-              -DWITH_GDAL=ON \
-              -DPYTHON_DEFAULT_EXECUTABLE=/usr/bin/python3 \
-              -DWITH_OPENCL=OFF \
+        cmake -DPYTHON_DEFAULT_EXECUTABLE=/usr/bin/python3 \
               -DCMAKE_TOOLCHAIN_FILE=../platforms/linux/aarch64-gnu.toolchain.cmake \
               -DOPENCV_EXTRA_MODULES_PATH=../../opencv_contrib/modules ../
 
