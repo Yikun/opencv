@@ -1,8 +1,6 @@
 name: arm64 build checks
 
-on:
-  pull_request:
-    branches: [ master ]
+on: [push, pull_request]
 
 jobs:
   build:
@@ -20,7 +18,6 @@ jobs:
                 crossbuild-essential-arm64 \
                 git \
                 cmake \
-                ca-certificates \
                 libpython-dev:arm64 \
                 libpython3-dev:arm64 \
                 python-numpy \
