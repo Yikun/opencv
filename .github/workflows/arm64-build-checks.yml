@@ -16,6 +16,7 @@ jobs:
         sudo sed -i -E 's|^deb ([^ ]+) (.*)$|deb [arch=amd64] \1 \2\ndeb [arch=arm64] http://ports.ubuntu.com/ubuntu-ports/ \2|' /etc/apt/sources.list
         sudo dpkg --add-architecture arm64
         sudo apt-get update
+        sudo apt-get install -y --no-install-recommends python:arm64 python3:arm64
         sudo apt-get install -y --no-install-recommends \
                 crossbuild-essential-arm64 \
                 git \
@@ -23,10 +24,8 @@ jobs:
                 ca-certificates \
                 libpython-dev:arm64 \
                 libpython3-dev:arm64 \
-                python-numpy \
-                python3-numpy \
-                libgstreamer1.0-dev:arm64 \
-                libgstreamer-plugins-base1.0-dev:arm64
+                python-numpy:arm64 \
+                python3-numpy:arm64 \
 
     - name: Fetch opencv_contrib
       run: |
@@ -36,7 +35,10 @@ jobs:
       run: |
         mkdir build
         cd build
-        cmake -DPYTHON_DEFAULT_EXECUTABLE=/usr/bin/python3 \
+        cmake -DPYTHON2_INCLUDE_PATH=/usr/include/python2.7/ \
+              -DPYTHON2_NUMPY_INCLUDE_DIRS=/usr/lib/python2.7/dist-packages/numpy/core/include \
+              -DPYTHON3_INCLUDE_PATH=/usr/include/python3.6m/ \
+              -DPYTHON3_NUMPY_INCLUDE_DIRS=/usr/lib/python3/dist-packages/numpy/core/include \
               -DCMAKE_TOOLCHAIN_FILE=../platforms/linux/aarch64-gnu.toolchain.cmake \
               -DOPENCV_EXTRA_MODULES_PATH=../../opencv_contrib/modules ../
 
